@@ -1,18 +1,16 @@
 package com.example.registration.controller;
 
 import com.example.registration.model.Student;
-import com.example.registration.services.StudentRepository;
-import org.springframework.context.annotation.Profile;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import com.example.registration.services.StudentService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class WebController {
 
-    private StudentRepository studentRepository;
+    @Autowired
+    private StudentService studentService;
 
     @GetMapping("/hello")
     public String hello(@RequestParam(name="name", required=false, defaultValue="User") String name, Model model) {
@@ -25,8 +23,8 @@ public class WebController {
     public void addStudent(@RequestBody Student student) {
         // Use the StudentRepository to add the student to DynamoDB
         if(student == null){
-            student = new Student("Sanky1299","Sanket Dumbare", 29 );
+            student = new Student("12345678","Sanket Dumbare", 29 );
         }
-        studentRepository.addStudent(student);
+        studentService.addStudent(student);
     }
 }

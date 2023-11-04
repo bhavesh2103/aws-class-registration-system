@@ -1,7 +1,8 @@
 package com.example.registration.services;
 
 import com.example.registration.model.Student;
-import org.springframework.stereotype.Repository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 import software.amazon.awssdk.services.dynamodb.model.PutItemRequest;
@@ -9,13 +10,14 @@ import software.amazon.awssdk.services.dynamodb.model.PutItemRequest;
 import java.util.HashMap;
 import java.util.Map;
 
-@Repository
-public class StudentRepository {
-    private final DynamoDbClient dynamoDbClient;
+
+@Service
+public class StudentService {
+    @Autowired
+    private  DynamoDbClient dynamoDbClient;
     private final String tableName; // Name of your DynamoDB table ("Student_Data")
 
-    public StudentRepository(DynamoDbClient dynamoDbClient) {
-        this.dynamoDbClient = dynamoDbClient;
+    public StudentService() {
         this.tableName = "Student_Data"; // Set the table name here
     }
 
@@ -32,9 +34,9 @@ public class StudentRepository {
 
     private Map<String, AttributeValue> createStudentItem(Student student) {
         java.util.Map<String, AttributeValue> item = new HashMap<>();
-        item.put("StudentID", AttributeValue.builder().s(student.getStudentID()).build());
-        item.put("Name", AttributeValue.builder().s(student.getName()).build());
-        item.put("Age", AttributeValue.builder().n(Integer.toString(student.getAge())).build());
+        item.put("student_id", AttributeValue.builder().s(student.getStudentID()).build());
+        item.put("name", AttributeValue.builder().s(student.getName()).build());
+        item.put("age", AttributeValue.builder().n(Integer.toString(student.getAge())).build());
         return item;
     }
 }

@@ -1,8 +1,8 @@
 package com.example.registration.model;
 
 public class Student {
-    public Student(String studentID, String name, int age) {
-        this.studentID = studentID;
+    public Student(String student_id, String name, int age) {
+        this.studentID = student_id;
         this.name = name;
         this.age = age;
     }

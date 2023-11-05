@@ -12,11 +12,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
-
 @RestController
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST}, allowedHeaders = "*")
 public class WebController {
-
     @Autowired
     private StudentService studentService;
     @Autowired
@@ -34,8 +32,7 @@ public class WebController {
         return "Greetings "+name+" from Spring Boot!";
     }
 
-    @PostMapping
-    @RequestMapping("/register/update")
+    @PostMapping("/register/update")
     public String updatePrefrenceList(@RequestBody Student student) {
         String studentID = student.getStudentId();
         Student newStudent = studentService.getStudent(studentID);
@@ -49,8 +46,7 @@ public class WebController {
 
     }
 
-    @PostMapping
-    @RequestMapping("/addStudent")
+    @PostMapping("/addStudent")
     public String addStudent(@RequestBody Student student) {
         studentService.addStudent(student);
         return "Success";
@@ -76,8 +72,7 @@ public class WebController {
     }
 
 
-    @GetMapping
-    @RequestMapping("/login")
+    @GetMapping("/login")
     public  Map<String, String> login(@RequestParam String username, String password) {
         List<Student> studentData = new ArrayList<>();
         studentData = studentService.getAllStudents();
@@ -96,8 +91,7 @@ public class WebController {
         return response;
     }
 
-    @GetMapping
-    @RequestMapping("/executeMatching")
+    @GetMapping("/executeMatching")
     public List<Student> execute() {
         Map<String, PriorityQueue<CoursePriority>> result = matchingService.executeAlgorithm();
         Map<String,List<String>> finalResult= new HashMap<>();
@@ -137,8 +131,7 @@ public class WebController {
     }
 
 
-    @PostMapping
-    @RequestMapping("/addStudents")
+    @PostMapping("/addStudents")
     public String addStudents(@RequestBody List<Student> studentList) {
         for(Student student  : studentList)
             studentService.addStudent(student);
@@ -152,8 +145,7 @@ public class WebController {
         return "Success";
     }
 
-    @GetMapping
-    @RequestMapping("/getCourseList")
+    @GetMapping("/getCourseList")
     public List<Courses> getCourses(@RequestParam String studentId, String courseCode){
         List<Courses> coursesList = new ArrayList<>();
         System.out.println(studentId);

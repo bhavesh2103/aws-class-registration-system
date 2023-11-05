@@ -13,23 +13,12 @@ public class CorsConfig {
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
-
-        // Allow requests from specific origins. You can specify multiple origins.
-        config.addAllowedOriginPattern("*");
-
-        config.addAllowedMethod("GET");
-        config.addAllowedMethod("POST");
-        config.addAllowedMethod("PUT");
-        config.addAllowedMethod("DELETE");
-        config.addAllowedMethod("OPTIONS");
-
-        config.addAllowedHeader("Origin");
-        config.addAllowedHeader("Content-Type");
-        config.addAllowedHeader("Accept");
-        config.addAllowedHeader("Authorization");
-
-        source.registerCorsConfiguration("/**", config);
+        config.addAllowedOrigin("*"); // Allow requests from any origin. You can specify a specific origin instead.
+        config.addAllowedMethod("*"); // Allow all HTTP methods.
+        config.addAllowedHeader("*"); // Allow all headers.
+        source.registerCorsConfiguration("/**", config); // Apply this configuration to all URL paths.
 
         return new CorsFilter(source);
     }
+
 }

@@ -10,11 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import java.util.Map;
-import java.util.PriorityQueue;
+import java.util.*;
 
 @RestController
 public class WebController {
@@ -66,7 +62,7 @@ public class WebController {
     }
 
     @PostMapping
-    @RequestMapping("/courses")
+    @RequestMapping("/addCourses")
     public String addCourses(@RequestBody Courses course) {
         courseService.addCourses(course);
         return "Course Added Successfully";
@@ -75,20 +71,46 @@ public class WebController {
 
     @GetMapping
     @RequestMapping("/login")
-    public boolean login(@RequestParam String username, String password) {
+    public  Map<String, String> login(@RequestParam String username, String password) {
         List<Student> studentData = new ArrayList<>();
         studentData = studentService.getAllStudents();
         for (Student studentDatum : studentData) {
             if (studentDatum.getUserName().equals(username) && studentDatum.getPassword().equals(password)) {
-                return true;
+                Map<String, String> response = new HashMap<>();
+                response.put("message", "Login successful");
+                response.put("status", "true");
+                response.put("studentId", studentDatum.getStudentId());
+                return response;
             }
         }
-        return false;
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Login failed");
+        response.put("status", "false");
+        return response;
     }
 
     @GetMapping
     @RequestMapping("/executeMatching")
     public Map<String, PriorityQueue<CoursePriority>> execute() {
         return  matchingService.executeAlgorithm();
+    }
+
+    @GetMapping
+    @RequestMapping("/getCourseList")
+    public List<Courses> getCourses(@RequestParam String studentId, String courseCode){
+        List<Courses> coursesList = new ArrayList<>();
+        System.out.println(studentId);
+        System.out.println(courseCode);
+        List<String> pastcourses = studentService.getPastSubjects(studentId);
+        if(courseCode == null){
+            System.out.println("Called Without Course Code");
+            String courseMajor = studentService.getStudentMajor(studentId);
+            coursesList = courseService.getCourseData(courseMajor,pastcourses);
+        }
+        else{
+            System.out.println("Called Course Code");
+            coursesList = courseService.getCoursesStartingWithCourseCode(courseCode,pastcourses);
+        }
+        return coursesList;
     }
 }

@@ -61,6 +61,13 @@ public class StudentService {
             }
             item.put("references", AttributeValue.builder().m(referralsMap).build());
         }
+        if (student.getFinalCourses() != null) {
+            item.put("finalCourses", AttributeValue.builder().l(
+                    student.getFinalCourses().stream()
+                            .map(final_course -> AttributeValue.builder().s(final_course).build())
+                            .collect(Collectors.toList())
+            ).build());
+        }
 
         return item;
     }
@@ -108,6 +115,8 @@ public class StudentService {
         student.setReferences( item.get("references").m().entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, entry-> Integer.valueOf(entry.getValue().n()))));
         student.setPastCourseList( item.get("pastCourseList").l().stream().map(AttributeValue::s).toList() );
         student.setPreferenceList( item.get("preferenceList").l().stream().map(AttributeValue::s).toList() );
+        student.setFinalCourses( item.get("finalCourses").l().stream().map(AttributeValue::s).toList() );
+
         return  student;
     }
 

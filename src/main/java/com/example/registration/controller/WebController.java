@@ -5,10 +5,6 @@ import com.example.registration.services.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
-
-import java.util.List;
-import java.util.Map;
 
 @RestController
 public class WebController {
@@ -25,11 +21,11 @@ public class WebController {
     @PostMapping
     @RequestMapping("/register/update")
     public String updatePrefrenceList(@RequestBody Student student) {
-        String studentID = student.getStudentID();
+        String studentID = student.getStudentId();
         // Use the StudentRepository to add the student to DynamoDB
         Student newStudent = studentService.getStudent(studentID);
         if( newStudent!=null){
-            newStudent.setPriorityCourses(student.getPriorityCourses());
+            newStudent.setPreferenceList(student.getPreferenceList());
             studentService.addStudent(newStudent);
             return "Success";
         }else{
@@ -39,10 +35,11 @@ public class WebController {
     }
 
     @PostMapping
-    @RequestMapping("/students")
-    public void addStudent(@RequestBody Student student) {
+    @RequestMapping("/addStudent")
+    public String addStudent(@RequestBody Student student) {
         // Use the StudentRepository to add the student to DynamoDB
         studentService.addStudent(student);
+        return "Success";
     }
 
 

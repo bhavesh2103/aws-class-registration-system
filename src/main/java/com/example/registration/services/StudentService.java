@@ -115,7 +115,11 @@ public class StudentService {
         student.setReferences( item.get("references").m().entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, entry-> Integer.valueOf(entry.getValue().n()))));
         student.setPastCourseList( item.get("pastCourseList").l().stream().map(AttributeValue::s).toList() );
         student.setPreferenceList( item.get("preferenceList").l().stream().map(AttributeValue::s).toList() );
-        student.setFinalCourses( item.get("finalCourses").l().stream().map(AttributeValue::s).toList() );
+        if (item.containsKey("finalCourses")){
+            student.setFinalCourses( item.get("finalCourses").l().stream().map(AttributeValue::s).toList() );
+        }else {
+            student.setFinalCourses(new ArrayList<>());
+        }
 
         return  student;
     }

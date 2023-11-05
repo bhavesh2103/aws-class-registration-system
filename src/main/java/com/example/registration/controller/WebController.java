@@ -103,11 +103,36 @@ public class WebController {
           for (String key : result.keySet()){
               PriorityQueue<CoursePriority> val = result.get(key);
               List<String> temp = new ArrayList<>();
-              val.stream().forEach(i->temp.add(i.stringValue));
+              val.forEach(i->temp.add(i.stringValue));
               finalResult.put(key,temp);
           }
-
+        updateDDB(finalResult);
         return finalResult;
+    }
+
+    private void updateDDB(Map<String, List<String>> finalResult) {
+        Map<String,List<String>> studentAssignedMap = new HashMap<>();
+        for (String course : finalResult.keySet()){
+            List<String> assignedStudents = finalResult.get(course);
+            for (String student : assignedStudents){
+                List<String> tempList;
+                List<String> val = studentAssignedMap.get(student);
+                if ( val== null){
+                    tempList= new ArrayList<>();
+                }else {
+                    tempList = val;
+                }
+
+               tempList.add(course);
+               studentAssignedMap.put(student,new ArrayList<>(new HashSet<>(tempList)));
+            }
+        }
+        for (String student : studentAssignedMap.keySet() ){
+            List<String> assignedList= studentAssignedMap.get(student);
+           Student student1 =  getStudent(student);
+           student1.setFinalCourses(assignedList);
+           addStudent(student1);
+        }
     }
 
 

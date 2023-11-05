@@ -15,7 +15,6 @@ public class CorsConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         // Allow requests from specific origins. You can specify multiple origins.
-        config.addAllowedOrigin("*");
         config.addAllowedOriginPattern("*");
 
         config.addAllowedMethod("GET");

@@ -5,8 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
+import software.amazon.awssdk.services.dynamodb.model.GetItemRequest;
+import software.amazon.awssdk.services.dynamodb.model.GetItemResponse;
 import software.amazon.awssdk.services.dynamodb.model.PutItemRequest;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,5 +41,19 @@ public class StudentService {
         item.put("name", AttributeValue.builder().s(student.getName()).build());
         item.put("age", AttributeValue.builder().n(Integer.toString(student.getAge())).build());
         return item;
+    }
+    public Student getStudent(String studentID){
+        GetItemResponse response = dynamoDbClient.getItem(GetItemRequest.builder().tableName(tableName).key(Collections.singletonMap("student_id", AttributeValue.builder().s(studentID).build())).build());
+
+        if (response.hasItem())
+            return convertDDBItemToStudent(response.item());
+        else
+            return null;
+    }
+    private  Student convertDDBItemToStudent(Map<String,AttributeValue> item){
+        Student student = new Student();
+        student.setStudentID(item.get("student_id").s());
+        student.setName(item.get("student_id").s());
+        return  student;
     }
 }

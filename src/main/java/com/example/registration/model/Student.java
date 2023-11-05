@@ -1,11 +1,15 @@
 package com.example.registration.model;
 
 public class Student {
+    public Student(){
+
+    }
     public Student(String student_id, String name, int age) {
         this.studentID = student_id;
         this.name = name;
         this.age = age;
     }
+
 
     public void setStudentID(String studentID) {
         this.studentID = studentID;

@@ -4,45 +4,48 @@ import java.util.List;
 import java.util.Map;
 
 public class Student {
-    private String studentID;
+
+
+    private String studentId;
     private String userName;
     private String password;
     private String name;
-    private String course_major;
-    private String work_experience;
+    private String courseMajor;
+    private String workExperience;
     private String projects;
-    private List<String> pastCourses;
-    private List<String> priorityCourses;
-    private Map<String, Integer> referalls;
+    private List<String> pastCourseList;
+    private List<String> preferenceList;
+    private Map<String, Integer> references;
+    public Student(){
 
-
-    public Student(String studentID, String userName, String password, String name, String course_major, String work_experience, String projects, List<String> pastCourses, List<String> priorityCourses, Map<String, Integer> referalls) {
-        this.studentID = studentID;
+    }
+    public Student(String studentId, String userName, String password, String name, String courseMajor, String workExperience, String projects, List<String> pastCourseList, List<String> preferenceList, Map<String, Integer> references) {
+        this.studentId = studentId;
         this.userName = userName;
-        this.password = password;
+        this.password = password; // TODO : Encrypt password
         this.name = name;
-        this.course_major = course_major;
-        this.work_experience = work_experience;
+        this.courseMajor = courseMajor;
+        this.workExperience = workExperience;
         this.projects = projects;
-        this.pastCourses = pastCourses;
-        this.priorityCourses = priorityCourses;
-        this.referalls = referalls;
+        this.pastCourseList = pastCourseList;
+        this.preferenceList = preferenceList;
+        this.references = references;
     }
 
-    public String getCourse_major() {
-        return course_major;
+    public String getCourseMajor() {
+        return courseMajor;
     }
 
-    public void setCourse_major(String course_major) {
-        this.course_major = course_major;
+    public void setCourseMajor(String courseMajor) {
+        this.courseMajor = courseMajor;
     }
 
-    public String getWork_experience() {
-        return work_experience;
+    public String getWorkExperience() {
+        return workExperience;
     }
 
-    public void setWork_experience(String work_experience) {
-        this.work_experience = work_experience;
+    public void setWorkExperience(String workExperience) {
+        this.workExperience = workExperience;
     }
 
     public String getProjects() {
@@ -53,32 +56,32 @@ public class Student {
         this.projects = projects;
     }
 
-    public List<String> getPastCourses() {
-        return pastCourses;
+    public List<String> getPastCourseList() {
+        return pastCourseList;
     }
 
-    public void setPastCourses(List<String> pastCourses) {
-        this.pastCourses = pastCourses;
+    public void setPastCourseList(List<String> pastCourseList) {
+        this.pastCourseList = pastCourseList;
     }
 
-    public Map<String, Integer> getReferalls() {
-        return referalls;
+    public Map<String, Integer> getReferences() {
+        return references;
     }
 
-    public void setReferalls(Map<String, Integer> referalls) {
-        this.referalls = referalls;
+    public void setReferences(Map<String, Integer> references) {
+        this.references = references;
     }
 
-    public void setStudentID(String studentID) {
-        this.studentID = studentID;
+    public void setStudentId(String studentId) {
+        this.studentId = studentId;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getStudentID() {
-        return studentID;
+    public String getStudentId() {
+        return studentId;
     }
 
     public void setName(String name) {
@@ -102,11 +105,11 @@ public class Student {
     }
 
 
-    public List<String> getPriorityCourses() {
-        return priorityCourses;
+    public List<String> getPreferenceList() {
+        return preferenceList;
     }
 
-    public void setPriorityCourses(List<String> priorityCourses) {
-        this.priorityCourses = priorityCourses;
+    public void setPreferenceList(List<String> preferenceList) {
+        this.preferenceList = preferenceList;
     }
 }

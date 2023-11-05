@@ -65,7 +65,7 @@ public class CourseService {
         return  course;
     }
 
-    public List<Courses> getCourseData(String courseMajor){
+    public List<Courses> getCourseData(String courseMajor, List<String> pastcourses){
 
         List<Courses> courses = new ArrayList<>();
 
@@ -81,16 +81,15 @@ public class CourseService {
             //System.out.println(student.getPassword());
             boolean eligibleCourse = course.getEligibleMajors().contains(courseMajor);
             if(eligibleCourse){
-                courses.add(course);
+                if(!pastcourses.contains(course.getCourseId())){
+                    courses.add(course);
+                }
             }
         }
-
-
-
         return courses;
     }
 
-    public List<Courses> getCoursesStartingWithCourseCode(String courseCode) {
+    public List<Courses> getCoursesStartingWithCourseCode(String courseCode, List<String> pastcourses) {
         List<Courses> courses = new ArrayList<>();
 
         ScanRequest scanRequest = ScanRequest.builder()
@@ -105,7 +104,9 @@ public class CourseService {
             //System.out.println(student.getPassword());
             boolean coursevalue = course.getCourseId().startsWith(courseCode);
             if(coursevalue){
-                courses.add(course);
+                if(!pastcourses.contains(course.getCourseId())){
+                    courses.add(course);
+                }
             }
         }
 

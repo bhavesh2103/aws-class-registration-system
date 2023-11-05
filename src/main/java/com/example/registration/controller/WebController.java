@@ -101,14 +101,15 @@ public class WebController {
         List<Courses> coursesList = new ArrayList<>();
         System.out.println(studentId);
         System.out.println(courseCode);
+        List<String> pastcourses = studentService.getPastSubjects(studentId);
         if(courseCode == null){
             System.out.println("Called Without Course Code");
             String courseMajor = studentService.getStudentMajor(studentId);
-            coursesList = courseService.getCourseData(courseMajor);
+            coursesList = courseService.getCourseData(courseMajor,pastcourses);
         }
         else{
             System.out.println("Called Course Code");
-            coursesList = courseService.getCoursesStartingWithCourseCode(courseCode);
+            coursesList = courseService.getCoursesStartingWithCourseCode(courseCode,pastcourses);
         }
         return coursesList;
     }

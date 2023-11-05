@@ -22,9 +22,6 @@ public class WebController {
     @RequestMapping("/students")
     public void addStudent(@RequestBody Student student) {
         // Use the StudentRepository to add the student to DynamoDB
-        if(student == null){
-            student = new Student("12345678","Sanket Dumbare", 29 );
-        }
         studentService.addStudent(student);
     }
 }

@@ -180,7 +180,7 @@ public class MatchingService {
         int score = 0;
         try{
             // Set your OpenAI API key
-            String apiKey = "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";
+            String apiKey = System.getenv("CHAT_GPT_API");
 
             // Define the API endpoint
             String endpoint = "https://api.openai.com/v1/chat/completions";

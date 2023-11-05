@@ -70,7 +70,7 @@ public class StudentService {
         return item;
     }
     public Student getStudent(String studentID){
-        GetItemResponse response = dynamoDbClient.getItem(GetItemRequest.builder().tableName(tableName).key(Collections.singletonMap("student_id", AttributeValue.builder().s(studentID).build())).build());
+        GetItemResponse response = dynamoDbClient.getItem(GetItemRequest.builder().tableName(tableName).key(Collections.singletonMap("studentId", AttributeValue.builder().s(studentID).build())).build());
 
         if (response.hasItem())
             return convertDDBItemToStudent(response.item());

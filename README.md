@@ -1,8 +1,8 @@
 # Easy Enroll - Class Registration System
 
-The web-application can be accessed using the Url: https://3.135.246.118/login-page, with the Admin User details as Admin User -
-Username: test101
-Password: test123
+The web application can be accessed using the Url: https://3.135.246.118/login-page. 
+
+The Admin User details are Admin User - Username: test101 Password: test123
 
 ## Inspiration
 
@@ -23,26 +23,6 @@ Easy Enroll is built using a combination of technologies:
 - Enhanced Gale-Shapley Algorithm: This algorithm is implemented to perform the course-student matching.
 - OpenAI's Language Model: We use the OpenAI LLM API to assess project relevancy for students, adding an additional layer to course selection.
 - Hosting: The application is hosted on AWS to ensure reliability and scalability.
-
-## Challenges we ran into
-
-1. **Hosting on AWS:** Setting up and configuring the hosting environment on AWS presented some challenges, but it allowed us to ensure high availability.
-2. **Optimizing the Algorithm:** Tuning the Gale-Shapley algorithm to handle edge cases efficiently was a complex task, but it now provides accurate and fast results.
-3. **Integration with OpenAI:** Incorporating the OpenAI LLM API into the application was challenging, but it significantly improved the course relevance assessment.
-
-## Accomplishments that we're proud of
-
-- Successfully implementing the enhanced Gale-Shapley algorithm for matching students with courses.
-- Integrating OpenAI's Language Model to provide students with insightful project relevancy scores.
-- Hosting the application on AWS for stability and scalability.
-
-## What we learned
-
-Through the development of Easy Enroll, we learned how to:
-
-- Implement complex matching algorithms to solve real-world problems.
-- Integrate external APIs, such as the OpenAI LLM, to enhance the functionality of our application.
-- Set up and manage a web application hosting environment on AWS.
 
 ## What's next for Easy Enroll
 

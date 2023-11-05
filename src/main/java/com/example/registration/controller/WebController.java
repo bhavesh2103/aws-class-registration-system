@@ -77,7 +77,7 @@ public class WebController {
     @RequestMapping("/login")
     public boolean login(@RequestParam String username, String password) {
         List<Student> studentData = new ArrayList<>();
-        studentData = studentService.getStudentData();
+        studentData = studentService.getAllStudents();
         for (Student studentDatum : studentData) {
             if (studentDatum.getUserName().equals(username) && studentDatum.getPassword().equals(password)) {
                 return true;

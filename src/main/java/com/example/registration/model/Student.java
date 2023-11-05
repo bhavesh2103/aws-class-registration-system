@@ -14,10 +14,12 @@ public class Student {
     private List<String> pastCourseList;
     private List<String> preferenceList;
     private Map<String, Integer> references;
+
+    private List<String> finalCourses;
     public Student(){
 
     }
-    public Student(String studentId, String userName, String password, String name, String courseMajor, String workExperience, String projects, List<String> pastCourseList, List<String> preferenceList, Map<String, Integer> references) {
+    public Student(String studentId, String userName, String password, String name, String courseMajor, String workExperience, String projects, List<String> pastCourseList, List<String> preferenceList, Map<String, Integer> references, List<String> finalCourses) {
         this.studentId = studentId;
         this.userName = userName;
         this.password = password; // TODO : Encrypt password
@@ -28,6 +30,7 @@ public class Student {
         this.pastCourseList = pastCourseList;
         this.preferenceList = preferenceList;
         this.references = references;
+        this.finalCourses = finalCourses;
     }
 
     public String getCourseMajor() {
@@ -109,5 +112,13 @@ public class Student {
 
     public void setPreferenceList(List<String> preferenceList) {
         this.preferenceList = preferenceList;
+    }
+
+    public List<String> getFinalCourses() {
+        return finalCourses;
+    }
+
+    public void setFinalCourses(List<String> finalCourses) {
+        this.finalCourses = finalCourses;
     }
 }

@@ -24,11 +24,13 @@ public class WebController {
 
     @PostMapping
     @RequestMapping("/register/update")
-    public String updatePrefrenceList(@RequestBody String studentID,@RequestBody List<String> newPrefrenceList) {
+    public String updatePrefrenceList(@RequestBody Student student) {
+        String studentID = student.getStudentID();
         // Use the StudentRepository to add the student to DynamoDB
-        Student student = studentService.getStudent(studentID);
-        if( student!=null){
-            studentService.addStudent(student);
+        Student newStudent = studentService.getStudent(studentID);
+        if( newStudent!=null){
+            newStudent.setPriorityCourses(student.getPriorityCourses());
+            studentService.addStudent(newStudent);
             return "Success";
         }else{
             return "No such student found";

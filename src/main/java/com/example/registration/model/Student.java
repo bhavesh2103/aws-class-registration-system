@@ -4,11 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 public class Student {
-    public Student(){
 
-    }
-    public Student(String student_id, String name, int age) {
-        this.studentID = student_id;
+
     private String studentID;
     private String userName;
     private String password;
@@ -18,10 +15,11 @@ public class Student {
     private String projects;
     private List<String> pastCourses;
     private List<String> priorityCourses;
-    private Map<String, Integer> referalls;
+    private Map<String, Integer> references;
+    public Student(){
 
-
-    public Student(String studentID, String userName, String password, String name, String course_major, String work_experience, String projects, List<String> pastCourses, List<String> priorityCourses, Map<String, Integer> referalls) {
+    }
+    public Student(String studentID, String userName, String password, String name, String course_major, String work_experience, String projects, List<String> pastCourses, List<String> priorityCourses, Map<String, Integer> references) {
         this.studentID = studentID;
         this.userName = userName;
         this.password = password;
@@ -31,7 +29,7 @@ public class Student {
         this.projects = projects;
         this.pastCourses = pastCourses;
         this.priorityCourses = priorityCourses;
-        this.referalls = referalls;
+        this.references = references;
     }
 
     public String getCourse_major() {
@@ -66,12 +64,12 @@ public class Student {
         this.pastCourses = pastCourses;
     }
 
-    public Map<String, Integer> getReferalls() {
-        return referalls;
+    public Map<String, Integer> getReferences() {
+        return references;
     }
 
-    public void setReferalls(Map<String, Integer> referalls) {
-        this.referalls = referalls;
+    public void setReferences(Map<String, Integer> references) {
+        this.references = references;
     }
 
     public void setStudentID(String studentID) {

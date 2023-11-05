@@ -59,9 +59,9 @@ public class StudentService {
                             .collect(Collectors.toList())
             ).build());
         }
-        if (student.getReferalls() != null && !student.getReferalls().isEmpty()) {
+        if (student.getReferences() != null && !student.getReferences().isEmpty()) {
             Map<String, AttributeValue> referralsMap = new HashMap<>();
-            for (Map.Entry<String, Integer> entry : student.getReferalls().entrySet()) {
+            for (Map.Entry<String, Integer> entry : student.getReferences().entrySet()) {
                 referralsMap.put(entry.getKey(), AttributeValue.builder().n(Integer.toString(entry.getValue())).build());
             }
             item.put("referrals", AttributeValue.builder().m(referralsMap).build());
@@ -80,7 +80,16 @@ public class StudentService {
     private  Student convertDDBItemToStudent(Map<String,AttributeValue> item){
         Student student = new Student();
         student.setStudentID(item.get("student_id").s());
-        student.setName(item.get("student_id").s());
+        student.setPassword(item.get("password").s());
+        student.setUserName(item.get("username").s());
+        student.setProjects(item.get("projects").s());
+        student.setName(item.get("name").s());
+        student.setCourse_major(item.get("course_major").s());
+        student.setUserName(item.get("username").s());
+        student.setWork_experience(item.get("work_experience").s());
+        student.setReferences( item.get("referrals").m().entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, entry-> Integer.valueOf(entry.getValue().n()))));
+        student.setPastCourses( item.get("past_courses").l().stream().map(AttributeValue::s).toList() );
+        student.setPriorityCourses( item.get("priorityCourses").l().stream().map(AttributeValue::s).toList() );
         return  student;
     }
 }

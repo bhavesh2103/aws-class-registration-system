@@ -14,6 +14,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class MatchingService {
@@ -71,9 +72,15 @@ public class MatchingService {
                         } else {
                             int minPriority = courseAssignments.get(courseId).peek().intValue;
                             String minStudent = courseAssignments.get(courseId).peek().stringValue;
-                            
+                            Student minStudentData = null;
                             if (minPriority == currentPriority) {
-                                double llmPrefMinStudent = getPreferenceLLM(courseMap.get(courseId), student); // TODO : use min student instead
+                                for (Student tempStudent  : studentList) {
+                                    if (tempStudent.getStudentId().equals(minStudent)){
+                                        minStudentData = tempStudent;
+                                        break;
+                                    }
+                                }
+                                double llmPrefMinStudent = getPreferenceLLM(courseMap.get(courseId),  minStudentData);
                                 double llmPrefCurStudent = getPreferenceLLM(courseMap.get(courseId), student);
                                 
                                 if (llmPrefMinStudent < llmPrefCurStudent) {
@@ -140,8 +147,8 @@ public class MatchingService {
         
         Map<String, Integer> reference = student.getReferences();
         
-        if (reference.get(course.getCourseId()) != null && reference.get(course.getCourseId()) == 1) {
-            summ += 10;
+        if (reference.get(course.getCourseId()) != null) {
+            summ += reference.get(course.getCourseId());
         }
         
         return summ;

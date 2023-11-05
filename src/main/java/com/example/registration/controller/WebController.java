@@ -66,7 +66,7 @@ public class WebController {
     }
 
     @PostMapping
-    @RequestMapping("/courses")
+    @RequestMapping("/addCourses")
     public String addCourses(@RequestBody Courses course) {
         courseService.addCourses(course);
         return "Course Added Successfully";
@@ -90,5 +90,23 @@ public class WebController {
     @RequestMapping("/executeMatching")
     public Map<String, PriorityQueue<CoursePriority>> execute() {
         return  matchingService.executeAlgorithm();
+    }
+
+    @GetMapping
+    @RequestMapping("/getCourseList")
+    public List<Courses> getCourses(@RequestParam String studentId, String courseCode){
+        List<Courses> coursesList = new ArrayList<>();
+        System.out.println(studentId);
+        System.out.println(courseCode);
+        if(courseCode == null){
+            System.out.println("Called Without Course Code");
+            String courseMajor = studentService.getStudentMajor(studentId);
+            coursesList = courseService.getCourseData(courseMajor);
+        }
+        else{
+            System.out.println("Called Course Code");
+            coursesList = courseService.getCoursesStartingWithCourseCode(courseCode);
+        }
+        return coursesList;
     }
 }

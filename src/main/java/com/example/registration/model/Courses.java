@@ -7,7 +7,6 @@ public class Courses {
     private String courseId;
     private String courseName;
     private List<String> prerequisites;
-
     private int capacity;
     private String description;
     private List<String> eligibleMajors;

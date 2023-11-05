@@ -73,6 +73,12 @@ public class StudentService {
             return null;
     }
 
+    public String getStudentMajor(String studentID){
+        Student student = getStudent(studentID);
+
+        return student.getCourseMajor();
+    }
+
     public List<Student> getAllStudents(){
         ScanResponse response = dynamoDbClient.scan(ScanRequest.builder().tableName(tableName).build());
         List<Student> studentList = new ArrayList<>();

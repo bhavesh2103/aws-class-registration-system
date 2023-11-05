@@ -4,6 +4,7 @@ import com.example.registration.model.CoursePriority;
 import com.example.registration.model.Courses;
 import com.example.registration.model.Student;
 import com.example.registration.services.CourseService;
+import com.example.registration.services.DataGenerator;
 import com.example.registration.services.MatchingService;
 import com.example.registration.services.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,8 @@ public class WebController {
 
     @Autowired
     private StudentService studentService;
+    @Autowired
+    private DataGenerator dataGenerator;
 
     @Autowired
     MatchingService matchingService;
@@ -38,7 +41,6 @@ public class WebController {
     @RequestMapping("/register/update")
     public String updatePrefrenceList(@RequestBody Student student) {
         String studentID = student.getStudentId();
-        // Use the StudentRepository to add the student to DynamoDB
         Student newStudent = studentService.getStudent(studentID);
         if( newStudent!=null){
             newStudent.setPreferenceList(student.getPreferenceList());
@@ -53,21 +55,18 @@ public class WebController {
     @PostMapping
     @RequestMapping("/addStudent")
     public String addStudent(@RequestBody Student student) {
-        // Use the StudentRepository to add the student to DynamoDB
         studentService.addStudent(student);
         return "Success";
     }
     @GetMapping
     @RequestMapping("/getStudent")
     public Student getStudent(@RequestParam String studentId) {
-        // Use the StudentRepository to add the student to DynamoDB
         return studentService.getStudent(studentId);
 
     }
     @GetMapping
     @RequestMapping("/getAllStudents")
     public List<Student> getAllStudents() {
-        // Use the StudentRepository to add the student to DynamoDB
         return studentService.getAllStudents();
 
     }
@@ -97,5 +96,20 @@ public class WebController {
     @RequestMapping("/executeMatching")
     public Map<String, PriorityQueue<CoursePriority>> execute() {
         return  matchingService.executeAlgorithm();
+    }
+
+    @PostMapping
+    @RequestMapping("/addStudents")
+    public String addStudents(@RequestBody List<Student> studentList) {
+        for(Student student  : studentList)
+            studentService.addStudent(student);
+        return "Success";
+    }
+
+
+    @GetMapping("/generateRandomStudents")
+    public String addRandomStudents() {
+        dataGenerator.addRandomStudents(10);
+        return "Success";
     }
 }

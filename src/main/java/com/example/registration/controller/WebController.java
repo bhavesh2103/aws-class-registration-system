@@ -97,8 +97,17 @@ public class WebController {
 
     @GetMapping
     @RequestMapping("/executeMatching")
-    public Map<String, PriorityQueue<CoursePriority>> execute() {
-        return  matchingService.executeAlgorithm();
+    public Map<String, List<String>> execute() {
+        Map<String, PriorityQueue<CoursePriority>> result = matchingService.executeAlgorithm();
+        Map<String,List<String>> finalResult= new HashMap<>();
+          for (String key : result.keySet()){
+              PriorityQueue<CoursePriority> val = result.get(key);
+              List<String> temp = new ArrayList<>();
+              val.stream().forEach(i->temp.add(i.stringValue));
+              finalResult.put(key,temp);
+          }
+
+        return finalResult;
     }
 
 

@@ -13,6 +13,8 @@ public class MatchingService {
 
     @Autowired
     StudentService   studentService;
+    @Autowired
+    CourseService courseService;
     public Map<String, PriorityQueue<CoursePriority>> stableMatching(List<Student> studentList , List<Courses> coursesList) {
         Map<String, String> studentAssignments = new HashMap<>();
 
@@ -97,7 +99,10 @@ public class MatchingService {
                     }
                     
                     for (String course : delCourses) {
-                        student.getPreferenceList().remove(course);
+                        List<String> temp = new ArrayList<>(student.getPreferenceList());
+                        temp.remove(course);
+                        student.setPreferenceList(temp);
+
                     }
                 }
                 
@@ -153,11 +158,12 @@ public class MatchingService {
 
     public Map<String, PriorityQueue<CoursePriority>> executeAlgorithm(){
         List<Student> studentList = studentService.getAllStudents();
+        List<Courses> coursesList = courseService.getAllCourses();
 //        Map<String,List<String>> studentPrefs=new HashMap<>();
 //        for(Student student : studentList ){
 //            studentPrefs.put(student.getStudentId(),student.getPreferenceList());
 //        }
-        Map<String, PriorityQueue<CoursePriority>> matching = stableMatching(studentList, null);
+        Map<String, PriorityQueue<CoursePriority>> matching = stableMatching(studentList, coursesList);
         return matching;
 
     }

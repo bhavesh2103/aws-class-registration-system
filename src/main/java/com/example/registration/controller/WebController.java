@@ -1,18 +1,26 @@
 package com.example.registration.controller;
 
+import com.example.registration.model.CoursePriority;
 import com.example.registration.model.Courses;
 import com.example.registration.model.Student;
 import com.example.registration.services.CourseService;
+import com.example.registration.services.MatchingService;
 import com.example.registration.services.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
+import java.util.PriorityQueue;
 
 @RestController
 public class WebController {
 
     @Autowired
     private StudentService studentService;
+
+    @Autowired
+    MatchingService matchingService;
 
     @Autowired
     private CourseService courseService;
@@ -59,5 +67,11 @@ public class WebController {
     public String addCourses(@RequestBody Courses course) {
         courseService.addCourses(course);
         return "Course Added Successfully";
+    }
+
+    @GetMapping
+    @RequestMapping("/executeMatching")
+    public Map<String, PriorityQueue<CoursePriority>> execute() {
+        return  matchingService.executeAlgorithm();
     }
 }

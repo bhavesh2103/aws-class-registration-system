@@ -4,14 +4,9 @@ import com.example.registration.model.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
-import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
-import software.amazon.awssdk.services.dynamodb.model.GetItemRequest;
-import software.amazon.awssdk.services.dynamodb.model.GetItemResponse;
-import software.amazon.awssdk.services.dynamodb.model.PutItemRequest;
+import software.amazon.awssdk.services.dynamodb.model.*;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -77,6 +72,19 @@ public class StudentService {
         else
             return null;
     }
+
+    public List<Student> getAllStudents(){
+        ScanResponse response = dynamoDbClient.scan(ScanRequest.builder().tableName(tableName).build());
+        List<Student> studentList = new ArrayList<>();
+        if (response.hasItems())
+            for(Map<String,AttributeValue> item : response.items()){
+                 studentList.add(convertDDBItemToStudent(item));
+            }
+        else
+            return null;
+        return studentList;
+    }
+
     private  Student convertDDBItemToStudent(Map<String,AttributeValue> item){
         Student student = new Student();
         student.setStudentId(item.get("studentId").s());

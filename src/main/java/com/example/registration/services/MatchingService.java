@@ -1,22 +1,36 @@
 package com.example.registration.services;
 
+import com.example.registration.model.CoursePriority;
+import com.example.registration.model.Courses;
+import com.example.registration.model.Student;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.util.*;
 
+@Service
 public class MatchingService {
-    public static Map<String, List<String>> stableMatching(Map<String, List<String>> studentPrefs, Map<String, Integer> courseCapacity) {
+
+    @Autowired
+    StudentService   studentService;
+    public Map<String, PriorityQueue<CoursePriority>> stableMatching(List<Student> studentList , List<Courses> coursesList) {
         Map<String, String> studentAssignments = new HashMap<>();
-        Map<String, List<String>> courseAssignments = new HashMap<>();
-        
-        for (String course : courseCapacity.keySet()) {
-            courseAssignments.put(course, new ArrayList<>());
+
+        Map<String, PriorityQueue<CoursePriority>> courseAssignments = new HashMap<>();
+        Map<String, Courses> courseMap = new HashMap<>();
+
+        for (Courses course : coursesList) {
+            PriorityQueue<CoursePriority> minHeap = new PriorityQueue<>(Comparator.comparingInt(e -> e.intValue));
+            courseAssignments.put(course.getCourseId(), minHeap);
+            courseMap.put(course.getCourseId(),course);
         }
         
         Map<String, Integer> studentCount = new HashMap<>();
-        for (String student : studentPrefs.keySet()) {
-            studentCount.put(student, 3);
+        for (Student student : studentList ) {
+            studentCount.put(student.getStudentId(), 3);
         }
         
-        int studentLeft = studentPrefs.size();
+        int studentLeft = studentList.size();
         int flag = 0;
         int count = studentLeft * studentLeft - 1;
         
@@ -26,67 +40,68 @@ public class MatchingService {
             }
             flag++;
             
-            for (String student : studentPrefs.keySet()) {
-                if (studentCount.get(student) == 0) {
+            for (Student student  : studentList) {
+                String id=student.getStudentId();
+                if (studentCount.get(id) == 0) {
                     continue;
                 }
                 
-                while (studentCount.get(student) > 0) {
+                while (studentCount.get(id) > 0) {
                     List<String> delCourses = new ArrayList<>();
-                    List<String> coursePreferences = studentPrefs.get(student);
+                    List<String> studentPreferenceList = student.getPreferenceList();
                     
-                    for (String course : coursePreferences) {
-                        double currentPriority = coursePreference(course, student);
-                        delCourses.add(course);
-                        
-                        if (courseCapacity.get(course) > 0) {
-                            courseAssignments.get(course).add(currentPriority + ":" + student);
-                            studentCount.put(student, studentCount.get(student) - 1);
-                            courseCapacity.put(course, courseCapacity.get(course) - 1);
+                    for (String courseId : studentPreferenceList) {
+                        int currentPriority = coursePreference(courseMap.get(courseId), student);
+                        delCourses.add(courseId);
+                        int courseCap= courseMap.get(courseId).getCapacity();
+                        if (courseCap > 0) {
+                            courseAssignments.get(courseId).offer(new CoursePriority(currentPriority,id));
+                            studentCount.put(id, studentCount.get(id) - 1);
+                            courseMap.get(courseId).setCapacity(courseCap - 1);
                             break;
                         } else {
-                            double minPriority = Double.parseDouble(courseAssignments.get(course).get(0).split(":")[0]);
-                            String minStudent = courseAssignments.get(course).get(0).split(":")[1];
+                            int minPriority = courseAssignments.get(courseId).peek().intValue;
+                            String minStudent = courseAssignments.get(courseId).peek().stringValue;
                             
                             if (minPriority == currentPriority) {
-                                double llmPrefMinStudent = getPreferenceLLM(course, minStudent);
-                                double llmPrefCurStudent = getPreferenceLLM(course, student);
+                                double llmPrefMinStudent = getPreferenceLLM(courseMap.get(courseId), student); // TODO : use min student instead
+                                double llmPrefCurStudent = getPreferenceLLM(courseMap.get(courseId), student);
                                 
                                 if (llmPrefMinStudent < llmPrefCurStudent) {
-                                    courseAssignments.get(course).remove(0);
+                                    courseAssignments.get(courseId).poll();
                                     studentCount.put(minStudent, studentCount.get(minStudent) + 1);
                                     
                                     if (studentCount.get(minStudent) == 1) {
                                         studentLeft++;
                                     }
                                     
-                                    courseAssignments.get(course).add(currentPriority + ":" + student);
-                                    studentCount.put(student, studentCount.get(student) - 1);
+                                    courseAssignments.get(courseId).offer(new CoursePriority(currentPriority,id));
+                                    studentCount.put(id, studentCount.get(id) - 1);
                                     break;
                                 }
                             }
                             
                             if (minPriority < currentPriority) {
-                                courseAssignments.get(course).remove(0);
+                                courseAssignments.get(courseId).remove(0);
                                 studentCount.put(minStudent, studentCount.get(minStudent) + 1);
                                 
                                 if (studentCount.get(minStudent) == 1) {
                                     studentLeft++;
                                 }
                                 
-                                courseAssignments.get(course).add(currentPriority + ":" + student);
-                                studentCount.put(student, studentCount.get(student) - 1);
+                                courseAssignments.get(courseId).offer(new CoursePriority(currentPriority,id));
+                                studentCount.put(id, studentCount.get(id) - 1);
                                 break;
                             }
                         }
                     }
                     
                     for (String course : delCourses) {
-                        studentPrefs.get(student).remove(course);
+                        student.getPreferenceList().remove(course);
                     }
                 }
                 
-                if (studentCount.get(student) == 0) {
+                if (studentCount.get(id) == 0) {
                     studentLeft--;
                 }
             }
@@ -95,10 +110,10 @@ public class MatchingService {
         return courseAssignments;
     }
     
-    public static double coursePreference(String course, String student) {
-        double summ = 0.0;
-        List<String> preqCourses = new ArrayList<>();
-        List<String> pastCourses = new ArrayList<>();
+    public  int coursePreference(Courses course, Student student) {
+        int summ = 0;
+        List<String> preqCourses =course.getPrerequisites();
+        List<String> pastCourses = student.getPastCourseList();
         
         int numPreq = preqCourses.size();
         int countPreq = 0;
@@ -109,30 +124,44 @@ public class MatchingService {
             }
         }
         
-        summ = summ + (countPreq / numPreq) * 10;
+        summ = summ + (int)((countPreq / numPreq) * 10);
         
-        Map<String, Integer> reference = new HashMap<>();
+        Map<String, Integer> reference = student.getReferences();
         
-        if (reference.get(course) != null && reference.get(course) == 1) {
-            summ += 10.0;
+        if (reference.get(course.getCourseId()) != null && reference.get(course.getCourseId()) == 1) {
+            summ += 10;
         }
         
         return summ;
     }
     
-    public static double getPreferenceLLM(String course, String student) {
+    public  int getPreferenceLLM(Courses course, Student student) {
         // Implement your logic for LLM preference calculation here
-        return 0.0;
+        return 0;
     }
     
-    public static void main(String[] args) {
-        Map<String, List<String>> studentPrefs = new HashMap<>();
-        // Initialize studentPrefs with randomized preferences
-        
-        Map<String, Integer> courseCapacity = new HashMap<>();
-        // Initialize courseCapacity with randomized values
-        
-        Map<String, List<String>> assignments = stableMatching(studentPrefs, courseCapacity);
-        System.out.println(assignments);
+//    public static void main(String[] args) {
+//        Map<String, List<String>> studentPrefs = new HashMap<>();
+//        // Initialize studentPrefs with randomized preferences
+//
+//        Map<String, Integer> courseCapacity = new HashMap<>();
+//        // Initialize courseCapacity with randomized values
+//
+//        Map<String, List<String>> assignments = stableMatching(studentPrefs, courseCapacity);
+//        System.out.println(assignments);
+//    }
+
+    public Map<String, PriorityQueue<CoursePriority>> executeAlgorithm(){
+        List<Student> studentList = studentService.getAllStudents();
+//        Map<String,List<String>> studentPrefs=new HashMap<>();
+//        for(Student student : studentList ){
+//            studentPrefs.put(student.getStudentId(),student.getPreferenceList());
+//        }
+        Map<String, PriorityQueue<CoursePriority>> matching = stableMatching(studentList, null);
+        return matching;
+
     }
+
+
+
 }

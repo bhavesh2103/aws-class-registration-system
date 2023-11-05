@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import java.util.Map;
 import java.util.PriorityQueue;
 
@@ -67,6 +70,20 @@ public class WebController {
     public String addCourses(@RequestBody Courses course) {
         courseService.addCourses(course);
         return "Course Added Successfully";
+    }
+
+
+    @GetMapping
+    @RequestMapping("/login")
+    public boolean login(@RequestParam String username, String password) {
+        List<Student> studentData = new ArrayList<>();
+        studentData = studentService.getStudentData();
+        for (Student studentDatum : studentData) {
+            if (studentDatum.getUserName().equals(username) && studentDatum.getPassword().equals(password)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @GetMapping

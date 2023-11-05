@@ -49,8 +49,8 @@ public class WebController {
 
     @PostMapping
     @RequestMapping("/courses")
-    public void addCourses(@RequestBody Courses course) {
-        // Use the StudentRepository to add the student to DynamoDB
+    public String addCourses(@RequestBody Courses course) {
         courseService.addCourses(course);
+        return "Course Added Successfully";
     }
 }

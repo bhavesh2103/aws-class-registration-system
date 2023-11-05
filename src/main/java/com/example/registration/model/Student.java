@@ -5,21 +5,27 @@ import java.util.Map;
 
 public class Student {
     private String studentID;
+    private String userName;
+    private String password;
     private String name;
     private String course_major;
     private String work_experience;
     private String projects;
     private List<String> pastCourses;
+    private List<String> priorityCourses;
     private Map<String, Integer> referalls;
 
 
-    public Student(String studentID, String name, String course_major, String work_experience, String projects, List<String> pastCourses, Map<String, Integer> referalls) {
+    public Student(String studentID, String userName, String password, String name, String course_major, String work_experience, String projects, List<String> pastCourses, List<String> priorityCourses, Map<String, Integer> referalls) {
         this.studentID = studentID;
+        this.userName = userName;
+        this.password = password;
         this.name = name;
         this.course_major = course_major;
         this.work_experience = work_experience;
         this.projects = projects;
         this.pastCourses = pastCourses;
+        this.priorityCourses = priorityCourses;
         this.referalls = referalls;
     }
 
@@ -63,10 +69,6 @@ public class Student {
         this.referalls = referalls;
     }
 
-
-
-
-
     public void setStudentID(String studentID) {
         this.studentID = studentID;
     }
@@ -83,8 +85,28 @@ public class Student {
         this.name = name;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
 
+    public List<String> getPriorityCourses() {
+        return priorityCourses;
+    }
 
-
+    public void setPriorityCourses(List<String> priorityCourses) {
+        this.priorityCourses = priorityCourses;
+    }
 }

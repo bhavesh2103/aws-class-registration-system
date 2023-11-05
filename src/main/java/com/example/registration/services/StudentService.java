@@ -36,6 +36,8 @@ public class StudentService {
     private Map<String, AttributeValue> createStudentItem(Student student) {
         java.util.Map<String, AttributeValue> item = new HashMap<>();
         item.put("student_id", AttributeValue.builder().s(student.getStudentID()).build());
+        item.put("username", AttributeValue.builder().s(student.getUserName()).build());
+        item.put("password", AttributeValue.builder().s(student.getPassword()).build());
         item.put("name", AttributeValue.builder().s(student.getName()).build());
         item.put("course_major", AttributeValue.builder().s(student.getCourse_major()).build());
         item.put("work_experience", AttributeValue.builder().s(student.getWork_experience()).build());
@@ -47,7 +49,13 @@ public class StudentService {
                             .collect(Collectors.toList())
             ).build());
         }
-
+        if (student.getPriorityCourses() != null) {
+            item.put("priorityCourses", AttributeValue.builder().l(
+                    student.getPriorityCourses().stream()
+                            .map(selected_course -> AttributeValue.builder().s(selected_course).build())
+                            .collect(Collectors.toList())
+            ).build());
+        }
         if (student.getReferalls() != null && !student.getReferalls().isEmpty()) {
             Map<String, AttributeValue> referralsMap = new HashMap<>();
             for (Map.Entry<String, Integer> entry : student.getReferalls().entrySet()) {

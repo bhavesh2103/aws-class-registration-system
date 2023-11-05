@@ -72,6 +72,19 @@ public class StudentService {
         else
             return null;
     }
+
+    public List<Student> getAllStudents(){
+        ScanResponse response = dynamoDbClient.scan(ScanRequest.builder().tableName(tableName).build());
+        List<Student> studentList = new ArrayList<>();
+        if (response.hasItems())
+            for(Map<String,AttributeValue> item : response.items()){
+                 studentList.add(convertDDBItemToStudent(item));
+            }
+        else
+            return null;
+        return studentList;
+    }
+
     private  Student convertDDBItemToStudent(Map<String,AttributeValue> item){
         Student student = new Student();
         student.setStudentId(item.get("studentId").s());
@@ -87,29 +100,6 @@ public class StudentService {
         return  student;
     }
 
-    public List<Student> getStudentData(){
-        DynamoDbClient dynamoDbClient = DynamoDbClient.builder().build();
-
-        List<Student> students = new ArrayList<>();
-
-        ScanRequest scanRequest = ScanRequest.builder()
-                .tableName("StudentData") // Replace with your table name
-                .build();
-
-        ScanResponse scanResponse = dynamoDbClient.scan(scanRequest);
-        List<Map<String, AttributeValue>> items = scanResponse.items();
-
-        for (Map<String, AttributeValue> item : items) {
-            Student student = convertDDBItemToStudent(item);
-            //System.out.println(student.getUserName());
-            //System.out.println(student.getPassword());
-            students.add(student);
-        }
-
-        dynamoDbClient.close();
-
-        return students;
-    }
 
 
 

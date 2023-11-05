@@ -101,8 +101,8 @@ public class StudentService {
 
         for (Map<String, AttributeValue> item : items) {
             Student student = convertDDBItemToStudent(item);
-            System.out.println(student.getUserName());
-            System.out.println(student.getPassword());
+            //System.out.println(student.getUserName());
+            //System.out.println(student.getPassword());
             students.add(student);
         }
 

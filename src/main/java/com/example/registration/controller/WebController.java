@@ -10,11 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import java.util.Map;
-import java.util.PriorityQueue;
+import java.util.*;
 
 @RestController
 public class WebController {
@@ -75,15 +71,22 @@ public class WebController {
 
     @GetMapping
     @RequestMapping("/login")
-    public boolean login(@RequestParam String username, String password) {
+    public  Map<String, String> login(@RequestParam String username, String password) {
         List<Student> studentData = new ArrayList<>();
         studentData = studentService.getAllStudents();
         for (Student studentDatum : studentData) {
             if (studentDatum.getUserName().equals(username) && studentDatum.getPassword().equals(password)) {
-                return true;
+                Map<String, String> response = new HashMap<>();
+                response.put("message", "Login successful");
+                response.put("status", "true");
+                response.put("studentId", studentDatum.getStudentId());
+                return response;
             }
         }
-        return false;
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Login failed");
+        response.put("status", "false");
+        return response;
     }
 
     @GetMapping

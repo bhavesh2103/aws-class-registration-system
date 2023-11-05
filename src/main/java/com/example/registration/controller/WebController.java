@@ -97,7 +97,7 @@ public class WebController {
 
     @GetMapping
     @RequestMapping("/executeMatching")
-    public Map<String, List<String>> execute() {
+    public List<Student> execute() {
         Map<String, PriorityQueue<CoursePriority>> result = matchingService.executeAlgorithm();
         Map<String,List<String>> finalResult= new HashMap<>();
           for (String key : result.keySet()){
@@ -107,7 +107,7 @@ public class WebController {
               finalResult.put(key,temp);
           }
         updateDDB(finalResult);
-        return finalResult;
+        return getAllStudents();
     }
 
     private void updateDDB(Map<String, List<String>> finalResult) {

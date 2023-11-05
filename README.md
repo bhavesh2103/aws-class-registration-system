@@ -1,8 +1,8 @@
 # Easy Enroll - Class Registration System
 
 Url: https://3.135.246.118/login-page
-Admin User
 
+Admin User -
 Username: test101
 Password: test123
 

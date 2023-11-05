@@ -65,6 +65,21 @@ public class CourseService {
         return  course;
     }
 
+    public List<Courses> getAllCourses(){
+        List<Courses> courses = new ArrayList<>();
+
+        ScanRequest scanRequest = ScanRequest.builder()
+                .tableName("CourseData") // Replace with your table name
+                .build();
+
+        ScanResponse scanResponse = dynamoDbClient.scan(scanRequest);
+        List<Map<String, AttributeValue>> items = scanResponse.items();
+        for (Map<String, AttributeValue> item : items) {
+            Courses course = convertDDBItemToCourse(item);
+            courses.add(course);
+        }
+        return courses;
+    }
     public List<Courses> getCourseData(String courseMajor, List<String> pastcourses){
 
         List<Courses> courses = new ArrayList<>();

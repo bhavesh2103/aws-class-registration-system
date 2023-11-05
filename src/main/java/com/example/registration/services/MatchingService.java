@@ -55,8 +55,22 @@ public class MatchingService {
                 if (studentCount.get(id) == 0) {
                     continue;
                 }
-                
+                int prevCount = 0;
                 while (studentCount.get(id) > 0) {
+                    if (prevCount == studentCount.get(id) ){
+                        //rendomly assign course to this student
+                        for( String courseId : courseMap.keySet()){
+                            int cap = courseMap.get(courseId).getCapacity();
+                            if (cap > 0){
+                                courseAssignments.get(courseId).offer(new CoursePriority(coursePreference(courseMap.get(courseId), student),id));
+                                break;
+                            }
+                        }
+
+                        studentCount.put(id, studentCount.get(id) - 1);
+                        break;
+                    }
+                    prevCount = studentCount.get(id);
                     List<String> delCourses = new ArrayList<>();
                     List<String> studentPreferenceList = student.getPreferenceList();
                     
@@ -127,6 +141,10 @@ public class MatchingService {
         }
         
         return courseAssignments;
+    }
+
+    public void randomAssignCourse(Student student, Map<String, Courses> courseMap){
+
     }
     
     public  int coursePreference(Courses course, Student student) {

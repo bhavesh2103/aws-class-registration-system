@@ -1,6 +1,7 @@
 package com.example.registration;
 
 import com.example.registration.configs.AwsConfig;
+
 import com.example.registration.configs.CorsConfig;
 import com.example.registration.controller.WebController;
 import com.example.registration.model.Courses;

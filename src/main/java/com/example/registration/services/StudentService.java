@@ -4,14 +4,9 @@ import com.example.registration.model.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
-import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
-import software.amazon.awssdk.services.dynamodb.model.GetItemRequest;
-import software.amazon.awssdk.services.dynamodb.model.GetItemResponse;
-import software.amazon.awssdk.services.dynamodb.model.PutItemRequest;
+import software.amazon.awssdk.services.dynamodb.model.*;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -91,4 +86,32 @@ public class StudentService {
         student.setPreferenceList( item.get("preferenceList").l().stream().map(AttributeValue::s).toList() );
         return  student;
     }
+
+    public List<Student> getStudentData(){
+        DynamoDbClient dynamoDbClient = DynamoDbClient.builder().build();
+
+        List<Student> students = new ArrayList<>();
+
+        ScanRequest scanRequest = ScanRequest.builder()
+                .tableName("StudentData") // Replace with your table name
+                .build();
+
+        ScanResponse scanResponse = dynamoDbClient.scan(scanRequest);
+        List<Map<String, AttributeValue>> items = scanResponse.items();
+
+        for (Map<String, AttributeValue> item : items) {
+            Student student = convertDDBItemToStudent(item);
+            System.out.println(student.getUserName());
+            System.out.println(student.getPassword());
+            students.add(student);
+        }
+
+        dynamoDbClient.close();
+
+        return students;
+    }
+
+
+
+
 }

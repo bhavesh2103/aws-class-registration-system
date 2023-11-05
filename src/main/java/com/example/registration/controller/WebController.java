@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 public class WebController {
 
@@ -59,5 +62,19 @@ public class WebController {
     public String addCourses(@RequestBody Courses course) {
         courseService.addCourses(course);
         return "Course Added Successfully";
+    }
+
+
+    @GetMapping
+    @RequestMapping("/login")
+    public String login(@RequestParam String username, String password) {
+        List<Student> studentData = new ArrayList<>();
+        studentData = studentService.getStudentData();
+        for (Student studentDatum : studentData) {
+            if (studentDatum.getUserName().equals(username) && studentDatum.getPassword().equals(password)) {
+                return "Login Successful";
+            }
+        }
+        return "User Not Found";
     }
 }

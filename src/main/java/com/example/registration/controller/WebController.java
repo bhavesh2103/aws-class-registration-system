@@ -19,9 +19,28 @@ public class WebController {
     }
 
     @PostMapping
-    @RequestMapping("/students")
-    public void addStudent(@RequestBody Student student) {
+    @RequestMapping("/register/update")
+    public String updatePrefrenceList(@RequestBody Student student) {
+        String studentID = student.getStudentId();
+        // Use the StudentRepository to add the student to DynamoDB
+        Student newStudent = studentService.getStudent(studentID);
+        if( newStudent!=null){
+            newStudent.setPreferenceList(student.getPreferenceList());
+            studentService.addStudent(newStudent);
+            return "Success";
+        }else{
+            return "No such student found";
+        }
+
+    }
+
+    @PostMapping
+    @RequestMapping("/addStudent")
+    public String addStudent(@RequestBody Student student) {
         // Use the StudentRepository to add the student to DynamoDB
         studentService.addStudent(student);
+        return "Success";
     }
+
+
 }

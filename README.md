@@ -2,7 +2,7 @@
 
 The web application can be accessed using the link: https://3.135.246.118/login-page. 
 
-The Admin User details are Admin User - Username: test101 Password: test123
+The Admin User details are - Username: test101 Password: test123
 
 ## Inspiration
 

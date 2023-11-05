@@ -67,14 +67,14 @@ public class WebController {
 
     @GetMapping
     @RequestMapping("/login")
-    public String login(@RequestParam String username, String password) {
+    public boolean login(@RequestParam String username, String password) {
         List<Student> studentData = new ArrayList<>();
         studentData = studentService.getStudentData();
         for (Student studentDatum : studentData) {
             if (studentDatum.getUserName().equals(username) && studentDatum.getPassword().equals(password)) {
-                return "Login Successful";
+                return true;
             }
         }
-        return "User Not Found";
+        return false;
     }
 }

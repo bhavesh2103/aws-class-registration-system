@@ -12,6 +12,7 @@ import software.amazon.awssdk.services.dynamodb.model.PutItemRequest;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -38,8 +39,34 @@ public class StudentService {
     private Map<String, AttributeValue> createStudentItem(Student student) {
         java.util.Map<String, AttributeValue> item = new HashMap<>();
         item.put("student_id", AttributeValue.builder().s(student.getStudentID()).build());
+        item.put("username", AttributeValue.builder().s(student.getUserName()).build());
+        item.put("password", AttributeValue.builder().s(student.getPassword()).build());
         item.put("name", AttributeValue.builder().s(student.getName()).build());
-        item.put("age", AttributeValue.builder().n(Integer.toString(student.getAge())).build());
+        item.put("course_major", AttributeValue.builder().s(student.getCourse_major()).build());
+        item.put("work_experience", AttributeValue.builder().s(student.getWork_experience()).build());
+        item.put("projects", AttributeValue.builder().s(student.getProjects()).build());
+        if (student.getPastCourses() != null) {
+            item.put("past_courses", AttributeValue.builder().l(
+                    student.getPastCourses().stream()
+                            .map(course -> AttributeValue.builder().s(course).build())
+                            .collect(Collectors.toList())
+            ).build());
+        }
+        if (student.getPriorityCourses() != null) {
+            item.put("priorityCourses", AttributeValue.builder().l(
+                    student.getPriorityCourses().stream()
+                            .map(selected_course -> AttributeValue.builder().s(selected_course).build())
+                            .collect(Collectors.toList())
+            ).build());
+        }
+        if (student.getReferalls() != null && !student.getReferalls().isEmpty()) {
+            Map<String, AttributeValue> referralsMap = new HashMap<>();
+            for (Map.Entry<String, Integer> entry : student.getReferalls().entrySet()) {
+                referralsMap.put(entry.getKey(), AttributeValue.builder().n(Integer.toString(entry.getValue())).build());
+            }
+            item.put("referrals", AttributeValue.builder().m(referralsMap).build());
+        }
+
         return item;
     }
     public Student getStudent(String studentID){

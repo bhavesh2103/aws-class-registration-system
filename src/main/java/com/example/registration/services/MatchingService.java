@@ -3,9 +3,16 @@ package com.example.registration.services;
 import com.example.registration.model.CoursePriority;
 import com.example.registration.model.Courses;
 import com.example.registration.model.Student;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.*;
 
 @Service
@@ -137,7 +144,76 @@ public class MatchingService {
     
     public  int getPreferenceLLM(Courses course, Student student) {
         // Implement your logic for LLM preference calculation here
-        return 0;
+        String studentProject = student.getProjects();
+        String courseName = course.getCourseName();
+        String llmMessage = "Subject is " + courseName + ". String is: " + studentProject;
+        int score = 0;
+        try{
+            // Set your OpenAI API key
+            String apiKey = "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";
+
+            // Define the API endpoint
+            String endpoint = "https://api.openai.com/v1/chat/completions";
+
+            // Define the request message
+            Map<String, Object> message = new HashMap<>();
+            message.put("role", "system");
+            message.put("content", "Analyse string to see this project or work is relevant to the subject given. Give a rating from 0 to 10, with 0 being least relevant and 10 being most relevant. Return only a number and nothing else. Be strict in this assessment, if a subject is not relevant, the score should be below 5.");
+
+            Map<String, Object> userMessage = new HashMap<>();
+            userMessage.put("role", "user");
+            userMessage.put("content", llmMessage);
+
+            Map<String, Object> requestBody = new HashMap<>();
+            requestBody.put("model", "gpt-3.5-turbo");  // Choose the appropriate GPT-3 engine
+            requestBody.put("messages", new Object[]{message, userMessage});
+
+            // Convert the request body to a JSON string
+            ObjectMapper om = new ObjectMapper();
+            String jsonRequestBody = om.writeValueAsString(requestBody);
+
+            // Create a URL object
+            URL url = new URL(endpoint);
+
+            // Create an HTTP connection
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+            // Set the HTTP request method to POST
+            connection.setRequestMethod("POST");
+
+            // Set the request headers, including the API key
+            connection.setRequestProperty("Authorization", "Bearer " + apiKey);
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setRequestProperty("Content-Length", Integer.toString(jsonRequestBody.length()));
+            connection.setDoOutput(true);
+
+            // Write the JSON request body to the connection's output stream
+            try (DataOutputStream out = new DataOutputStream(connection.getOutputStream())) {
+                out.writeBytes(jsonRequestBody);
+            }
+
+            // Get the HTTP response code
+            int responseCode = connection.getResponseCode();
+
+            // Read the response from the connection's input stream
+            try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+                String inputLine;
+                StringBuilder response = new StringBuilder();
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+
+                // get response
+                JsonNode responseNode = om.readTree(String.valueOf(response));
+                score = responseNode.get("choices").get(0).get("message").get("content").asInt();
+            }
+
+            // Close the connection
+            connection.disconnect();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return score;
     }
     
 //    public static void main(String[] args) {
@@ -163,5 +239,8 @@ public class MatchingService {
     }
 
 
-
+    public static void main(String[] args) {
+        MatchingService ms = new MatchingService();
+        ms.getPreferenceLLM(null, null);
+    }
 }

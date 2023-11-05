@@ -2,15 +2,16 @@ package com.example.registration.model;
 
 import java.util.List;
 
+
 public class Courses {
     private String courseId;
     private String courseName;
     private List<String> prerequisites;
-
     private int capacity;
     private String description;
     private List<String> eligibleMajors;
 
+    public Courses(){}
     public Courses(String courseId, String courseName, List<String> prerequisites, int capacity, String description, List<String> eligibleMajors) {
         this.courseId = courseId;
         this.courseName = courseName;

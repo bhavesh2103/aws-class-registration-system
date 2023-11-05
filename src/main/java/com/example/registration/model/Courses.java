@@ -3,29 +3,29 @@ package com.example.registration.model;
 import java.util.List;
 
 public class Courses {
-    private String course_id;
+    private String courseId;
     private String courseName;
     private List<String> prerequisites;
 
     private int capacity;
     private String description;
-    private List<String> eligible_majors;
+    private List<String> eligibleMajors;
 
-    public Courses(String course_id, String courseName, List<String> prerequisites, int capacity, String description, List<String> eligible_majors) {
-        this.course_id = course_id;
+    public Courses(String courseId, String courseName, List<String> prerequisites, int capacity, String description, List<String> eligibleMajors) {
+        this.courseId = courseId;
         this.courseName = courseName;
         this.prerequisites = prerequisites;
         this.capacity = capacity;
         this.description = description;
-        this.eligible_majors = eligible_majors;
+        this.eligibleMajors = eligibleMajors;
     }
 
-    public String getCourse_id() {
-        return course_id;
+    public String getCourseId() {
+        return courseId;
     }
 
-    public void setCourse_id(String course_id) {
-        this.course_id = course_id;
+    public void setCourseId(String courseId) {
+        this.courseId = courseId;
     }
 
     public String getCourseName() {
@@ -60,11 +60,11 @@ public class Courses {
         this.description = description;
     }
 
-    public List<String> getEligible_majors() {
-        return eligible_majors;
+    public List<String> getEligibleMajors() {
+        return eligibleMajors;
     }
 
-    public void setEligible_majors(List<String> eligible_majors) {
-        this.eligible_majors = eligible_majors;
+    public void setEligibleMajors(List<String> eligibleMajors) {
+        this.eligibleMajors = eligibleMajors;
     }
 }

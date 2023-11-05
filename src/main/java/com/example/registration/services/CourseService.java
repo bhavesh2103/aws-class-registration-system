@@ -1,7 +1,6 @@
 package com.example.registration.services;
 
 import com.example.registration.model.Courses;
-import com.example.registration.model.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
@@ -19,7 +18,7 @@ public class CourseService {
     private final String tableName; // Name of your DynamoDB table ("Student_Data")
 
     public CourseService() {
-        this.tableName = "Course_Data"; // Set the table name here
+        this.tableName = "CourseData"; // Set the table name here
     }
 
     public void addCourses(Courses course) {
@@ -35,7 +34,7 @@ public class CourseService {
 
     private Map<String, AttributeValue> createCourseItem(Courses course){
         java.util.Map<String, AttributeValue> item = new HashMap<>();
-        item.put("course_id", AttributeValue.builder().s(course.getCourse_id()).build());
+        item.put("course_id", AttributeValue.builder().s(course.getCourseId()).build());
         item.put("courseName", AttributeValue.builder().s(course.getCourseName()).build());
         if (course.getPrerequisites() != null) {
             item.put("prerequisites", AttributeValue.builder().l(
@@ -46,9 +45,9 @@ public class CourseService {
         }
         item.put("capacity", AttributeValue.builder().n(Integer.toString(course.getCapacity())).build());
         item.put("description", AttributeValue.builder().s(course.getDescription()).build());
-        if (course.getEligible_majors() != null) {
+        if (course.getEligibleMajors() != null) {
             item.put("eligible_majors", AttributeValue.builder().l(
-                    course.getEligible_majors().stream()
+                    course.getEligibleMajors().stream()
                             .map(major -> AttributeValue.builder().s(major).build())
                             .collect(Collectors.toList())
             ).build());

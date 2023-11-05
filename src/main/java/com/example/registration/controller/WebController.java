@@ -59,9 +59,16 @@ public class WebController {
     }
     @GetMapping
     @RequestMapping("/getStudent")
-    public Student addStudent(@RequestParam String studentId) {
+    public Student getStudent(@RequestParam String studentId) {
         // Use the StudentRepository to add the student to DynamoDB
         return studentService.getStudent(studentId);
+
+    }
+    @GetMapping
+    @RequestMapping("/getAllStudents")
+    public List<Student> getAllStudents() {
+        // Use the StudentRepository to add the student to DynamoDB
+        return studentService.getAllStudents();
 
     }
 

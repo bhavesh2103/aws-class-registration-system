@@ -4,6 +4,12 @@ The web application can be accessed using the link: https://3.135.246.118/login-
 
 The Admin User details are - Username: test101 Password: test123
 
+Working Demo
+
+https://github.com/bhavesh2103/aws-class-registration-system/assets/55141824/8aeefcdc-ecc7-46b5-a6c3-710af7d28b9b
+
+
+
 ## Inspiration
 
 The inspiration for Easy Enroll comes from the need to simplify the process of enrolling in courses for college students. College course enrollment can often be a complex and time-consuming task, and we wanted to create a solution that streamlines this process and helps students get the courses they want.

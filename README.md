@@ -1,8 +1,15 @@
 # Easy Enroll - Class Registration System
 
-The web application can be accessed using the link: https://3.135.246.118/login-page. 
+Smart Application that uses industry level algorithm + OpenAI API's to match students to open classess, preventing chaos and frustration of registering for classess. Application Works on principle on maximum happiness.
 
-The Admin User details are - Username: test101 Password: test123
+
+- Frontend: React.js for the web interface, allowing students to input their course preferences.
+- Backend: Spring Boot, a Java-based framework, hosts the matching algorithm API.
+- Enhanced Gale-Shapley Algorithm: This algorithm is implemented to perform the course-student matching.
+- OpenAI's Language Model: We use the OpenAI LLM API to assess project relevancy for students, adding an additional layer to course selection.
+- Hosting: The application is hosted on AWS to ensure reliability and scalability.
+
+Frontend : React.Js
 
 Working Demo
 
